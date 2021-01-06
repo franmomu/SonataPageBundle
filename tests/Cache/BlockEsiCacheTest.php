@@ -18,6 +18,8 @@ use Sonata\BlockBundle\Block\BlockContextManagerInterface;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
 use Sonata\Cache\CacheElement;
 use Sonata\PageBundle\Cache\BlockEsiCache;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class BlockEsiCacheTest extends TestCase
@@ -32,10 +34,22 @@ class BlockEsiCacheTest extends TestCase
         $router = $this->createMock(RouterInterface::class);
 
         $blockRenderer = $this->createMock(BlockRendererInterface::class);
-
         $contextManager = $this->createMock(BlockContextManagerInterface::class);
+        $controllerResolver = $this->createStub(ControllerResolverInterface::class);
+        $argumentResolver = $this->createStub(ArgumentResolverInterface::class);
 
-        $cache = new BlockEsiCache('My Token', [], $router, 'ban', $blockRenderer, $contextManager);
+        $cache = new BlockEsiCache(
+            'My Token',
+            [],
+            $router,
+            'ban',
+            $blockRenderer,
+            $contextManager,
+            [],
+            null,
+            $controllerResolver,
+            $argumentResolver
+        );
 
         $cache->get($keys, 'data');
     }
@@ -63,7 +77,21 @@ class BlockEsiCacheTest extends TestCase
         $blockRenderer = $this->createMock(BlockRendererInterface::class);
         $contextManager = $this->createMock(BlockContextManagerInterface::class);
 
-        $cache = new BlockEsiCache('My Token', [], $router, 'ban', $blockRenderer, $contextManager);
+        $controllerResolver = $this->createStub(ControllerResolverInterface::class);
+        $argumentResolver = $this->createStub(ArgumentResolverInterface::class);
+
+        $cache = new BlockEsiCache(
+            'My Token',
+            [],
+            $router,
+            'ban',
+            $blockRenderer,
+            $contextManager,
+            [],
+            null,
+            $controllerResolver,
+            $argumentResolver
+        );
 
         $this->assertTrue($cache->flush([]));
         $this->assertTrue($cache->flushAll());

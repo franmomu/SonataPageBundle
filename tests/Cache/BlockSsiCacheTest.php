@@ -18,6 +18,8 @@ use Sonata\BlockBundle\Block\BlockContextManagerInterface;
 use Sonata\BlockBundle\Block\BlockRendererInterface;
 use Sonata\Cache\CacheElement;
 use Sonata\PageBundle\Cache\BlockSsiCache;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class BlockSsiCacheTest extends TestCase
@@ -34,7 +36,18 @@ class BlockSsiCacheTest extends TestCase
         $blockRenderer = $this->createMock(BlockRendererInterface::class);
         $contextManager = $this->createMock(BlockContextManagerInterface::class);
 
-        $cache = new BlockSsiCache('', $router, $blockRenderer, $contextManager);
+        $controllerResolver = $this->createStub(ControllerResolverInterface::class);
+        $argumentResolver = $this->createStub(ArgumentResolverInterface::class);
+
+        $cache = new BlockSsiCache(
+            '',
+            $router,
+            $blockRenderer,
+            $contextManager,
+            [],
+            $controllerResolver,
+            $argumentResolver
+        );
 
         $cache->get($keys, 'data');
     }
@@ -62,7 +75,18 @@ class BlockSsiCacheTest extends TestCase
         $blockRenderer = $this->createMock(BlockRendererInterface::class);
         $contextManager = $this->createMock(BlockContextManagerInterface::class);
 
-        $cache = new BlockSsiCache('', $router, $blockRenderer, $contextManager);
+        $controllerResolver = $this->createStub(ControllerResolverInterface::class);
+        $argumentResolver = $this->createStub(ArgumentResolverInterface::class);
+
+        $cache = new BlockSsiCache(
+            '',
+            $router,
+            $blockRenderer,
+            $contextManager,
+            [],
+            $controllerResolver,
+            $argumentResolver
+        );
 
         $this->assertTrue($cache->flush([]));
         $this->assertTrue($cache->flushAll());
